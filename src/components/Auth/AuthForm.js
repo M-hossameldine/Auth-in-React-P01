@@ -1,14 +1,18 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import classes from './AuthForm.module.css';
 
-const API_KEY = 'AIzaSyDEP6_xvH_5QXkJ46mbv3g0VqsmZGEf27A'; // firebase project key
+import AuthContext from '../../store/auth-context';
+import { API_KEY } from '../../constants/api';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const emailInputRef = useRef();
   const passwordInpurRef = useRef();
+  const authCtx = useContext(AuthContext);
+  const history = useHistory();
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -55,14 +59,17 @@ const AuthForm = () => {
               authMessage = data.error.message;
             }
 
-            alert(authMessage);
-
             throw new Error(authMessage);
           });
         }
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
+        authCtx.login(data.idToken);
+        history.replace('/');
+      })
+      .catch((error) => {
+        alert(error.message);
       });
   };
 

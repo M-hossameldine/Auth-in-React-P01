@@ -28,8 +28,7 @@ export const AuthContextProvider = (props) => {
 
   return (
     <AuthContext.Provider value={contextValue}>
-      {' '}
-      {props.children}{' '}
+      {props.children}
     </AuthContext.Provider>
   );
 };
